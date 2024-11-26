@@ -1,0 +1,160 @@
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::fs;
+use std::io;
+use tui::{
+    backend::{CrosstermBackend},
+    layout::{Constraint, Direction, Layout},
+    style::{Color, Style},
+    text::{Span, Spans},
+    widgets::{Block, Borders, Paragraph},
+    Terminal,
+};
+use crossterm::event::{self, Event, KeyCode};
+
+#[derive(Serialize, Deserialize)]
+struct City {
+    name: String,
+    connections: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+struct MapData {
+    cities: HashMap<String, City>,
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Load the initial map from a JSON file
+    let map_data = load_map_data("california_map.json")?;
+    let mut current_route: Vec<String> = Vec::new();
+    
+    // Initialize terminal UI
+    let stdout = io::stdout();
+    let backend = CrosstermBackend::new(stdout);
+    let mut terminal = Terminal::new(backend)?;
+
+    // Main loop
+    loop {
+        terminal.draw(|f| {
+            // Layout
+            let chunks = Layout::default()
+                .direction(Direction::Vertical)
+                .constraints(
+                    [
+                        Constraint::Percentage(80),
+                        Constraint::Percentage(20),
+                    ]
+                    .as_ref(),
+                )
+                .split(f.size());
+
+            // Map visualization
+            let map_widget = render_map(&map_data, &current_route);
+            f.render_widget(map_widget, chunks[0]);
+
+            // Instruction area
+            let instructions = Paragraph::new(vec![
+                Spans::from("Instructions:"),
+                Spans::from("1. Press 's' to search routes."),
+                Spans::from("2. Press 'u' to upload new map."),
+                Spans::from("3. Press 'q' to quit."),
+            ])
+            .block(Block::default().borders(Borders::ALL).title("Instructions"));
+            f.render_widget(instructions, chunks[1]);
+        })?;
+
+        // Handle user input
+        if let Event::Key(key) = event::read()? {
+            match key.code {
+                KeyCode::Char('q') => break,
+                KeyCode::Char('s') => {
+                    println!("Enter starting city:");
+                    let start = read_input();
+                    println!("Enter destination city:");
+                    let end = read_input();
+
+                    current_route = find_route(&map_data, &start, &end);
+                }
+                KeyCode::Char('u') => {
+                    println!("Enter the path to the new map file:");
+                    let path = read_input();
+                    match load_map_data(&path) {
+                        Ok(new_map) => {
+                            println!("New map uploaded successfully!");
+                            main(); // Restart with the new map
+                        }
+                        Err(_) => println!("Failed to upload new map."),
+                    }
+                }
+                _ => {}
+            }
+        }
+    }
+
+    Ok(())
+}
+
+fn load_map_data(path: &str) -> Result<MapData, Box<dyn std::error::Error>> {
+    let file_content = fs::read_to_string(path)?;
+    let map_data: MapData = serde_json::from_str(&file_content)?;
+    Ok(map_data)
+}
+
+fn render_map(map_data: &MapData, highlight_route: &[String]) -> Paragraph {
+    let mut map_lines = Vec::new();
+
+    for (city, data) in &map_data.cities {
+        let connections: Vec<String> = data
+            .connections
+            .iter()
+            .map(|conn| format!("-> {}", conn))
+            .collect();
+        let city_line = format!("{}: {}", city, connections.join(", "));
+
+        if highlight_route.contains(city) {
+            map_lines.push(Spans::from(Span::styled(
+                city_line,
+                Style::default().fg(Color::Yellow),
+            )));
+        } else {
+            map_lines.push(Spans::from(city_line));
+        }
+    }
+
+    Paragraph::new(map_lines)
+        .block(Block::default().borders(Borders::ALL).title("California Map"))
+}
+
+fn find_route(map_data: &MapData, start: &str, end: &str) -> Vec<String> {
+    let mut visited = Vec::new();
+    let mut to_visit = vec![start.to_string()];
+
+    while let Some(current) = to_visit.pop() {
+        if current == end {
+            visited.push(current);
+            return visited;
+        }
+
+        if visited.contains(&current) {
+            continue;
+        }
+
+        visited.push(current.clone());
+
+        if let Some(city) = map_data.cities.get(&current) {
+            for connection in &city.connections {
+                if !visited.contains(connection) {
+                    to_visit.push(connection.clone());
+                }
+            }
+        }
+    }
+
+    Vec::new() // No route found
+}
+
+fn read_input() -> String {
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).unwrap();
+    input.trim().to_string()
+}
