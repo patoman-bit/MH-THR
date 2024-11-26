@@ -1,0 +1,39 @@
+pub fn start_map_module() {
+    println!("\nWelcome to Map Visualization.");
+    println!("Available Commands: View, Ping, Upload, Exit\n");
+
+    loop {
+        use std::io::{self, Write};
+        print!("MAP: ");
+        io::stdout().flush().unwrap();
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).unwrap();
+        let input = input.trim();
+
+        match input.to_lowercase().as_str() {
+            "view" => view_map(),
+            "ping" => add_ping(),
+            "upload" => upload_map(),
+            "exit" => {
+                println!("Exiting Map Module.");
+                break;
+            }
+            _ => println!("Command not recognized."),
+        }
+    }
+}
+
+fn view_map() {
+    println!("Displaying map...");
+    // Stub for rendering map
+}
+
+fn add_ping() {
+    println!("Adding ping...");
+    // Stub for ping functionality
+}
+
+fn upload_map() {
+    println!("Uploading map...");
+    // Stub for uploading new maps
+}
