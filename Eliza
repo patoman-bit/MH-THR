@@ -1,0 +1,8 @@
+mu-th-ur/
+├── main.rs (or main module)
+├── eliza/
+│   ├── mod.rs
+│   ├── patterns.rs
+│   ├── responses.rs
+├── nlp/
+│   ├── memory.rs (optional)
