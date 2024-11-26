@@ -1,0 +1,28 @@
+mod eliza;
+
+fn main() {
+    println!("\nWelcome to MU/TH/UR AI System.");
+    println!("Type 'ELIZA' to initiate conversational submodule.");
+    println!("Type 'Quit' to exit the system.\n");
+
+    loop {
+        use std::io::{self, Write};
+        print!("MU/TH/UR: ");
+        io::stdout().flush().unwrap();
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).unwrap();
+        let input = input.trim();
+
+        match input.to_lowercase().as_str() {
+            "eliza" => {
+                println!("\nInitializing ELIZA submodule...");
+                eliza::start_conversation();
+            }
+            "quit" => {
+                println!("\nMU/TH/UR: Shutting down. Goodbye!");
+                break;
+            }
+            _ => println!("MU/TH/UR: Command not recognized. Try 'ELIZA' or 'Quit'."),
+        }
+    }
+}
