@@ -1,3 +1,120 @@
 1.	Save the script as main.rs and compile it using cargo build --release.
 	2.	Create a california_map.json file as shown in the example above.
 	3.	Run the executable, and interact with the map via the terminal.
+
+
+
+
+To run and use the MU/TH/UR AI project, you’ll need to follow these steps. It involves setting up your environment, compiling the Rust project, and interacting with the terminal-based system. Here’s a step-by-step guide:
+1. Set Up Your Development Environment
+
+	1.	Install Rust:
+	•	Download and install Rust from rust-lang.org.
+	•	Use rustup to ensure you have the latest stable version:
+
+
+rustup update
+
+
+2.	Install Visual Studio Code:
+	•	If you haven’t already, download and install Visual Studio Code.
+	•	Add the Rust Analyzer extension for syntax highlighting, code suggestions, and debugging.
+	3.	Clone the Project Repository:
+	•	If you’re uploading this to GitHub, clone the repository to your machine:
+
+
+git clone https://github.com/your-username/mu-th-ur.git
+cd mu-th-ur
+
+
+
+2. Compile the Project
+
+	1.	Navigate to the project folder:
+
+
+cd mu-th-ur
+
+
+Build the project using Cargo (Rust’s build system):
+
+
+cargo build
+
+
+Run the project:
+
+cargo run
+
+
+Interacting with MU/TH/UR AI
+
+
+e following commands to interact with the submodules:
+	•	ELIZA: Launch the conversational AI.
+	•	MAP: Open the map visualization module.
+	•	TASKS: Manage tasks and schedules.
+	•	Quit: Exit the program.
+
+Example Usage:
+
+	1.	Launch ELIZA:
+
+MU/TH/UR: ELIZA
+ELIZA: How can I help you today?
+
+	•	Engage in a conversation.
+
+	2.	Open the Map Module:
+
+MU/TH/UR: MAP
+MAP: Available Commands: View, Ping, Upload, Exit
+MAP: view
+Displaying map...
+
+	•	You can view maps, add pings, or upload new ones.
+
+	3.	Access Task Management:
+
+MU/TH/UR: TASKS
+TASKS: 1. List Tasks
+TASKS: 2. Add New Task
+TASKS: 3. Exit
+TASKS: 1
+Listing all tasks...
+
+4. Add New Features or Updates
+
+	•	Use Visual Studio Code to edit the files.
+	•	After making changes, compile the project again with:
+
+cargo build
+
+
+	•	Test your changes using:
+
+cargo run
+
+5. Notes for Future Expansion
+
+	•	Adding New Maps:
+	•	To upload a map, use the upload command in the Map module. You can programmatically add new .json or other supported map files to the database.
+	•	Enhancing ELIZA:
+	•	Expand ELIZA’s functionality by editing src/eliza/ files, such as patterns.rs or responses.rs.
+	•	Commit Changes:
+	•	After making updates or testing new features, commit them to your GitHub repository:
+
+git add .
+git commit -m "Added new feature XYZ"
+git push
+
+6. Deployment (Optional)
+
+Once your project is complete and stable:
+	1.	Build a Standalone Executable:
+
+cargo build --release
+
+The executable will be located in the target/release/ directory.
+
+
