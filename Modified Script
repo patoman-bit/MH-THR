@@ -1,0 +1,101 @@
+use serde::{Deserialize, Serialize};
+use std::collections::{HashMap, HashSet};
+use tui::{
+    style::{Color, Style},
+    text::{Span, Spans},
+};
+
+// Add to the MapData structure to hold pings and highlights
+#[derive(Serialize, Deserialize)]
+struct MapData {
+    cities: HashMap<String, City>,
+    pings: HashSet<String>, // Store pinged cities
+    highlights: HashSet<String>, // Store highlighted cities
+}
+
+// Initialize pings and highlights in the main function
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut map_data = load_map_data("california_map.json")?;
+    let mut current_route: Vec<String> = Vec::new();
+
+    // Your existing terminal UI initialization...
+
+    loop {
+        terminal.draw(|f| {
+            // Render updated map with pings and highlights
+            let map_widget = render_map(&map_data, &current_route);
+            f.render_widget(map_widget, chunks[0]);
+        })?;
+
+        if let Event::Key(key) = event::read()? {
+            match key.code {
+                KeyCode::Char('s') => {
+                    // Search route logic (unchanged)
+                }
+                KeyCode::Char('p') => {
+                    println!("Enter city to ping:");
+                    let city = read_input();
+                    if map_data.cities.contains_key(&city) {
+                        map_data.pings.insert(city);
+                        println!("Ping added.");
+                    } else {
+                        println!("City not found.");
+                    }
+                }
+                KeyCode::Char('h') => {
+                    println!("Enter city to highlight:");
+                    let city = read_input();
+                    if map_data.cities.contains_key(&city) {
+                        map_data.highlights.insert(city);
+                        println!("Highlight added.");
+                    } else {
+                        println!("City not found.");
+                    }
+                }
+                KeyCode::Char('u') => {
+                    // Upload new map logic (unchanged)
+                }
+                KeyCode::Char('q') => break,
+                _ => {}
+            }
+        }
+    }
+
+    Ok(())
+}
+
+// Updated render_map function to include pings and highlights
+fn render_map(map_data: &MapData, highlight_route: &[String]) -> Paragraph {
+    let mut map_lines = Vec::new();
+
+    for (city, data) in &map_data.cities {
+        let connections: Vec<String> = data
+            .connections
+            .iter()
+            .map(|conn| format!("-> {}", conn))
+            .collect();
+        let city_line = format!("{}: {}", city, connections.join(", "));
+
+        let mut style = Style::default();
+
+        // Highlight the route
+        if highlight_route.contains(city) {
+            style = style.fg(Color::Yellow);
+        }
+
+        // Add ping indicator
+        if map_data.pings.contains(city) {
+            style = style.fg(Color::Cyan);
+        }
+
+        // Add highlight indicator
+        if map_data.highlights.contains(city) {
+            style = style.bg(Color::Green);
+        }
+
+        map_lines.push(Spans::from(Span::styled(city_line, style)));
+    }
+
+    Paragraph::new(map_lines)
+        .block(Block::default().borders(Borders::ALL).title("California Map"))
+}
