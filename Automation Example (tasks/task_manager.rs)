@@ -1,0 +1,35 @@
+pub fn task_interface() {
+    println!("\nMU/TH/UR Task Manager");
+    println!("1. List Tasks");
+    println!("2. Add New Task");
+    println!("3. Exit");
+
+    use std::io::{self, Write};
+    loop {
+        print!("Enter choice: ");
+        io::stdout().flush().unwrap();
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).unwrap();
+        let choice = input.trim();
+
+        match choice {
+            "1" => list_tasks(),
+            "2" => add_task(),
+            "3" => {
+                println!("Exiting Task Manager.");
+                break;
+            }
+            _ => println!("Invalid choice."),
+        }
+    }
+}
+
+fn list_tasks() {
+    println!("Listing all tasks...");
+    // Stub for task listing
+}
+
+fn add_task() {
+    println!("Add a new task...");
+    // Stub for adding tasks
+}
