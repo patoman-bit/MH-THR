@@ -1,0 +1,8 @@
+{
+  "cities": {
+    "San Francisco": {"name": "San Francisco", "connections": ["Los Angeles", "Sacramento"]},
+    "Los Angeles": {"name": "Los Angeles", "connections": ["San Francisco", "San Diego"]},
+    "San Diego": {"name": "San Diego", "connections": ["Los Angeles", "Sacramento"]},
+    "Sacramento": {"name": "Sacramento", "connections": ["San Francisco", "San Diego"]}
+  }
+}
