@@ -1,0 +1,37 @@
+mod eliza;
+mod map;
+mod tasks;
+
+fn main() {
+    println!("\nWelcome to MU/TH/UR AI Terminal System.");
+    println!("Available Commands: ELIZA, MAP, TASKS, Quit\n");
+
+    loop {
+        use std::io::{self, Write};
+        print!("MU/TH/UR: ");
+        io::stdout().flush().unwrap();
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).unwrap();
+        let input = input.trim();
+
+        match input.to_lowercase().as_str() {
+            "eliza" => {
+                println!("\nInitializing ELIZA...");
+                eliza::start_conversation();
+            }
+            "map" => {
+                println!("\nOpening Map Visualization...");
+                map::start_map_module();
+            }
+            "tasks" => {
+                println!("\nAccessing Task Automation...");
+                tasks::task_interface();
+            }
+            "quit" => {
+                println!("\nShutting down MU/TH/UR. Goodbye!");
+                break;
+            }
+            _ => println!("MU/TH/UR: Command not recognized."),
+        }
+    }
+}
