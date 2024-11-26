@@ -1,0 +1,17 @@
+pub struct Memory {
+    inputs: Vec<String>, // Stores past user inputs
+}
+
+impl Memory {
+    pub fn new() -> Self {
+        Memory { inputs: Vec::new() }
+    }
+
+    pub fn add_input(&mut self, input: String) {
+        self.inputs.push(input);
+    }
+
+    pub fn get_last(&self) -> Option<&String> {
+        self.inputs.last()
+    }
+}
