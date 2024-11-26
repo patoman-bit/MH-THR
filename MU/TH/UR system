@@ -1,0 +1,28 @@
+mu-th-ur/
+├── Cargo.toml                 # Rust dependencies and project metadata
+├── src/
+│   ├── main.rs                # Main entry point for the MU/TH/UR system
+│   ├── eliza/                 # ELIZA conversational submodule
+│   │   ├── mod.rs
+│   │   ├── patterns.rs
+│   │   ├── responses.rs
+│   │   ├── memory.rs
+│   ├── map/                   # Real-time map visualization
+│   │   ├── mod.rs
+│   │   ├── data.rs            # Handles map data and user uploads
+│   │   ├── ui.rs              # CLI rendering for map visualization
+│   ├── tasks/                 # Task automation system
+│   │   ├── mod.rs
+│   │   ├── task_manager.rs
+│   │   ├── scheduler.rs
+│   ├── memory/                # Core memory system
+│   │   ├── mod.rs
+│   │   ├── logs.rs
+│   │   ├── storage.rs
+│   ├── fsv/                   # File System Visualization (optional)
+│   │   ├── mod.rs
+│   │   ├── renderer.rs
+│   ├── audio/                 # Voice interaction and analysis
+│   │   ├── mod.rs
+│   │   ├── mic_input.rs
+│   │   ├── emotion_analysis.rs
