@@ -1,9 +1,0 @@
-mu-th-ur/
-├── Cargo.toml
-├── src/
-│   ├── main.rs        // Main MU/TH/UR system
-│   ├── eliza/         // ELIZA submodule
-│   │   ├── mod.rs
-│   │   ├── patterns.rs
-│   │   ├── responses.rs
-│   │   ├── memory.rs
